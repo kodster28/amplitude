@@ -23,6 +23,17 @@ const getSessionId = (event: MCEvent) => {
   return sessionId
 }
 
+// Get the device ID stored in the client, if it does not exist, make a random one, save it in the client, and return it.
+const getDeviceId = (event: MCEvent) => {
+  const { client } = event
+  let deviceId = event.payload.device_id || client.get('device_id')
+  if (!deviceId) {
+    deviceId = crypto.randomUUID()
+    client.set('device_id', deviceId, { scope: 'infinite' })
+  }
+  return deviceId
+}
+
 // Get the Event ID stored in the client, add +1 to it, and set the new value in the client
 const getEventId = (event: MCEvent) => {
   const { client } = event
